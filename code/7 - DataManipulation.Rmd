@@ -1,0 +1,553 @@
+---
+title: "Data Manipulation"
+author: "Your Name Here"
+output: html_document
+
+---
+
+```{r setup,include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE)
+```
+
+Press the green arrow on this code chunk to turn off warning messages.
+
+##### 🧠 Helpful Resources for Data Manipulation
+
+- 📝 [**dplyr cheatsheet)**](https://dplyr.tidyverse.org/)  
+
+- 📝 [**tidyr cheatsheet)**](https://tidyr.tidyverse.org/)  
+
+- 📝 [**readr cheatsheet)**](https://readr.tidyverse.org/)  
+
+- 📗 [**R for Data Science (CH5 - Data Transformation)**](https://r4ds.had.co.nz/transform.html)   
+  
+- 📗 [**R for Data Science (CH9 - Data Wrangling)**](https://r4ds.had.co.nz/wrangle-intro.html)  
+
+- 📃 [**Hadley Wickham Tidy Data Paper**](https://vita.had.co.nz/papers/tidy-data.pdf)  
+
+- 📘 [**R Markdown: The Definitive Guide**](https://bookdown.org/yihui/rmarkdown/)  
+
+- 💥 [**tidyexplain - animations of _join & pivot_**](https://www.garrickadenbuie.com/project/tidyexplain/)  
+
+
+## ⚙️ Your Turn (Set Up)  
+
+First step is always load the necessary packages. Insert a code chunk below to load the `tidyverse` and `palmerpenguins` packages using `library()`.
+
+___
+
+
+___
+
+Next we can take a look at the data structure. It may help to reference column names that you are interested in visualizing.  
+```{r}
+glimpse(penguins)
+```
+  
+## Your Turn 1  
+
+We have gone over several data manipulation *verbs* (functions) from the `dplyr` package:  
+`filter()`: keep rows that satisfy your conditions  
+`select()`: keep or exclude some columns  
+`mutate()`: add a new column  
+`group_by()` + `summarize()`: get summary statistics by group   
+`count()`: quickly find counts for different groups  
+
+
+First, lets create a **subset** of the `penguins` dataset that contains observations for Adelie `species` **AND** with body mass greater than 3700.  
+
+```{r}
+
+```
+  
+Next lets create another subset of only **female** **Adelie** penguins from **Dream** *AND* **Torgersen** island.  
+Hint - there should be 51 observations.  
+Reference the cheat sheet for logical operators to use with `filter()` such as `%in%` or `!=`.  
+
+```{r}
+
+
+```
+
+
+Run this code to create a familiar plot.  
+```{r}
+familiar_plot <- ggplot(penguins,mapping = aes(x = body_mass_g,
+                              y = flipper_length_mm,
+                              color = species))+
+  geom_point()
+
+familiar_plot
+```
+
+After examining the plot above I am interested in creating a subset of those penguins with the longest flipper lengths and highest body mass that are **NOT** Gentoo species.  
+Lets create a subset of **NOT** Gentoo penguins that have `body_mass_g` greater than 4000g and `flipper_length_mm` longer than 195mm .  
+We can save this subset as a new object and layer it over top our ggplot as a new `geom_point()` layer. 
+
+```{r}
+large_subset <- penguins %>%
+  filter()
+
+
+
+#Keeps the same familiar base plot, but adding in our NEW data subset to another geom_point layer. Fill in the blank
+
+familiar_plot + 
+  geom_point(data = ______, mapping = aes(x = body_mass_g,
+                                                y = flipper_length_mm,
+                                                color = species), size = 5 , alpha = 0.5 )
+```
+
+___
+  
+Let's say I want to convert all these fancy metric measurements into something I can actually understand. Use the `mutate()` function to convert all these *silli*meters to inches, and grams to good ol' pounds. Save this new data frame as `imperial_penguins <-`.    
+  
+Variables to convert:  
+-`bill_length_mm` to `bill_length_inches`  
+-`bill_depth_mm` to `bill_depth_inches`  
+-`flipper_length_mm` to `flipper_length_inches`  
+-`body_mass_g` to `body_mass_lbs`      
+  
+Conversion Factors:  
+`1mm = 0.03937 inches`  
+`1 g = 0.00220462 lbs`  
+
+
+```{r}
+
+
+
+
+
+
+
+```
+
+Inside the mutate function, add in the `.keep = "unused"` option to drop the variables that were used to calculate the new columns. Alternatively, we could use the `select()` function and specify all the columns we wish to keep. 
+
+
+Lets take our new `imperial_penguins` data frame and calculate some summary statistics. I want to `group_by()` `species` **AND** `sex` and then `summarize()` the `mean()` `body_mass_lbs`. Return a sorted list of `mean_lbs` from heaviest to lightest.  
+hint: `%>% arrange(desc(VariableName))`
+
+```{r}
+
+
+
+
+```
+  
+Hmm... there are some `NAs` in our summary table.  
+If we take a closer look at the original data, we’ll see that some observations of `body_mass_g` and subsequently `body_mass_lbs` contain missing values (`NA`).  
+Functions like `mean()` do not automatically ignore these `NAs` — so if there’s even one `NA` in the vector then the function will return an `NA`.  
+To fix this, we can use the argument `na.rm = TRUE` inside the `mean()` function, which tells the function to remove `NAs` before calculating.  
+
+hint: `mean(body_mass_lbs, na.rm = TRUE)`  
+
+```{r}
+# example
+mean(c(1,2,3,4,5)) # Works fine
+mean(c(1,2,3,4,5,NA)) #Returns an NA 
+mean(c(1,2,3,4,5,NA),na.rm = TRUE) # Works fine
+
+# Your turn
+
+
+
+
+```
+  
+There are still some observations with `NA's` in the sex column... we can fix this by adding in a line to `filter` these observations out.  
+hint: `%>% filter(sex != "NA")`  
+
+```{r}
+
+
+
+```
+
+  
+👍 Give a thumbs up once you have reached this point!
+
+
+```{r}
+
+# If you have extra time. Try combining your data manipulation skills with creating a ggplot. 
+# One idea is to clean (filter out NAs) and transform (mutate) your data to calculate the ratio between bill length and depth. 
+
+# Try plotting the bill_ratio as the y variable in a geom_violin() plot, and vary your x = , fill =, color = aesthetics. You could even overlay the points with "geom_jitter(width = 0.15, size = 1.5, alpha = 0.8)" which is an xy scatterplot with added variation, which is useful when one of your variables is discrete. 
+
+
+
+
+
+
+```
+
+
+## Your Turn 2 - Tidyr examples
+
+- 📗 [**tidyr Pivoting**](https://tidyr.tidyverse.org/articles/pivot.html)  
+  
+  
+  
+Using `table 4a` from the slides, we can pivot this data into a long "tidy" format. Here the years are the column names, and we pivot them to be values in a new column named "year". 
+
+```{r}
+
+# Pivot from wide to long
+table4a 
+
+table4a %>%
+pivot_longer(cols = 2:3, names_to ="year", 
+ values_to = "cases")
+```
+   
+   
+   
+Here we take the long table from `table2` in the slides and spread it wider to create new columns for cases and population. Now it is considered tidy.  
+
+```{r}
+#Pivot from Long to Wide
+table2
+
+table2 %>%
+pivot_wider(names_from = type, 
+ values_from = count)
+```
+
+
+
+`table5` has separate columns for century and year. Here we can use the unite function to combine these two columns. `sep = ""` is signifying that we want no space between the two values. 
+
+```{r}
+# Unite two columns of data (century and year)
+
+table5
+
+table5%>%
+unite(century, year, col = "year", sep = "") 
+```
+
+
+`table 3` from the slides had a column for rate which is a calculated statistic. We can use the `separate()` function to `separate` rate into `cases` and `population`. Here `sep = "/"` is telling the function to look for the forward slash to determine where to separate the two values at. 
+
+```{r}
+#Separate a column into two columns: rate (cases/population) to separate columns 
+
+table3
+
+table3%>%
+  separate(rate, sep = "/", 
+ into = c("cases", "pop")) 
+```
+
+  
+Sometimes your data set will have `NAs` that you want to replace.   
+Run the code below to see some tidyr options for handling `NAs`
+```{r}
+DF = tibble(X = c(LETTERS[1:5]),  # Create a pretend data frame with NAs
+            Y = c(1,NA,NA,3,NA))
+            
+DF 
+
+DF %>% drop_na() # Drop all observations that contain an NA
+
+DF %>% fill(Y) #Fills the NA slot with the value that was above. 
+
+DF %>% replace_na(list(Y = -999)) # Replace the NAs with a new value. 
+
+```
+
+
+
+💡 Challenge: `fish_encounters` is a data set with information about fish swimming down a river: each station represents an autonomous monitor that records if a tagged fish was seen at that location. Fish travel in one direction (migrating downstream). Information about misses is just as important as hits, but is not directly recorded in this form of the data.      
+  
+The data set is currently in a long format with columns for `fish`, `station`, and `seen`. We want to better see the misses. We can `pivot` this table into a wide format using `pivot_wider()`, where  `station` will give our column names (`names_from =`), and `seen` will give our values (`values_from =`).
+
+
+
+```{r}
+
+glimpse(fish_encounters)
+
+# Finish this code to pivot to a wide format
+fish_encounters %>%
+  pivot_
+```
+
+
+👍 Give a thumbs up once you have reached this point!
+
+  
+  
+  
+  
+  
+ 
+ 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+👀 No Peeking  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+## Your turn 3 - Alaska Salary Study
+
+
+This data was scrubbed from  
+[Benchmark jobs by salary minimum 65th percentile](https://doa.alaska.gov/dop/reports/doplrStudies/salaryStudy2025/Market65thPercentileMinimum.pdf)  
+*I imported the pdf into excel and manually cleaned the data, so no guarantees that I did not make any mistakes..
+
+This data is the benchmark comparisons of State of Alaska salaries to the market 65th percentile.  
+
+___ 
+
+#### Change the Rmarkdown default directory setting
+
+Rmarkdown has a strange default setting, where it treats the **.Rmd** file location itself as the working directory rather than the **.Rproj**. You can check this by creating a code chunk and comparing `getwd()` in markdown vs. console. Lets change this setting by going to Tools > Global Options... > R Markdown > Evaluate chunks in directory: Project 
+```{r}
+getwd()
+```
+
+#### Reading in Data
+
+We can click the files tab on the bottom right pane of Rstudio, and navigate to the `Salary65th_cleaned.csv`. We can click `Salary65th_cleaned.csv`, and then click "Import Dataset...". A pop up window will appear with a preview of the data set. Examine the columns to see what `readr` is *assuming* our data types are.  
+
+If we click import, then data set will be loaded into our **environment**, but this is *not* reproducible! The code to read in data is executed in the **console**, but not documented in the **.Rmd**. In the bottom right it gives us a "code preview", we can copy that and paste it into a code chunk in our Rmarkdown document here.  
+Instead of using the default `Salary65th_cleaned` object name, we can name it `salary <-` instead.  
+  
+```{r}
+
+# Note this will run on my computer only. This file path is nonsensical to any other computer.
+read_csv("C:/Users/lwendling/Desktop/ADFG_R_Intro_Workshop_2025/data/Salary65th_cleaned.csv")
+
+
+# Read in your data
+
+
+
+# Quick preview of the datas structure
+glimpse(salary)
+str(salary) 
+
+# View the data set in another window
+View(salary) 
+```
+  
+#### cleaning column names
+
+Now we want to `rename` some of the columns to something that will be easier to work with. We can then `select` the columns we may be interested in. 
+
+```{r}
+# Rename and select relevant columns
+salary <- salary %>%
+  rename(
+    Group = `AK State Occupational Group`,
+    Family = `AK State Job Family`,
+    BU = `AK State BU`,
+    Title = `AK State Job Title Only`,
+    Code = `AK State Job Class Code`,
+    Range = `AK State Pay Range`,
+    State_Salary = `AK State Annual Range Minimum (Step A)`,
+    Market_65th = `Combined Market 65th Percentile MINIMUM`,
+    Percent_Diff = `% Difference (State minus Market)/Market)`,
+  ) %>%
+  select(Title, Group, Family, Code, BU, Range, State_Salary, Market_65th, Percent_Diff)
+
+```
+
+
+Lets calculate some summary statistics. What is the average percent difference across *all* the jobs in the study?
+Use `summarize()` and `mean()` to find the average value of `Percent_Diff`. Fill in the blanks below.
+💡 Hint: Don't forget `na.rm = TRUE` to remove missing values!
+
+```{r}
+
+_____ %>%
+  _____(avg_diff = mean(_______, na____))
+```
+
+Maybe this value is skewed by some extreme outlines? Let's look at some of the job `Title`s with the largest `Percent_Diff`. Lets sort the data by `Percent_Diff` using the `arrange()` function and then look at the top 10. 
+
+```{r}
+
+_____ %>%
+  ______(_____) %>%  #First Sort the data
+  select(Title,Percent_Diff) %>%  #Select the columns for easy viewing
+  slice_head(n = ______) #Specify number of observations to return
+```
+There doesn't appear to be any `-1,000,000` type extreme outliers...but 🏆 for 5th place.
+
+Lets compare that with the other end of the spectrum. Again, we will sort by `Percent_Diff`, but instead we will specify that we want a descending order. 
+
+```{r}
+
+_____ %>%
+  ______(_____(_____)) %>%  #First Sort the data in descending order
+  select(Title,Percent_Diff) %>%  #Select the columns for easy viewing
+  slice_head(n = ______) #Specify number of observations to return
+```
+
+instead of arranging in descending order, we could have used the `slice_tail()`.  
+  
+Lets look at the total number of jobs that have a percent difference below 0, compared to the total number of jobs.  
+First, not every job in the data set has a value for `Percent_Diff`, so we need to use `filter(!is.na(Percent_Diff))` to only keep the observations where the `Percent_Diff` is not an `NA`.  
+Next, we can use the `summarize()` function to calculate the number of jobs that are below 0 using `sum(Percent_Diff < 0)`. Within the same `summarize` function, we can calculate the total number of jobs with `total = n()`. We can also use `summarize()` to calculate a new value based on the two values we just created, `proportion_below = below_market / total`.
+
+
+```{r}
+
+_____ %>%
+  filter(!is.na(_______)) %>%
+  summarize(
+    _______ = _________,
+    _______ = _____,
+    proportion_below = below_market / total
+  )
+
+```
+
+
+Now I am curious in more specifics. I want to know how the **mean** `Percent_Diff` looks across different jobs `Family` or `Group` designation.  
+Use the `group_by()` function to specify which grouping you want and then use `summarize()` to calculate the mean `Percent_Diff` by group. Bonus - you can use the arrange() function to sort.   
+💡 Hint: Don't forget `na.rm = TRUE` to remove missing values!
+```{r}
+
+# Percent difference grouped by job family
+______ %>%
+  _______ %>%
+  summarize(mean_percent_diff = ______________ )
+
+# Percent difference grouped by occupational group
+______ %>%
+  group_by(______) %>%
+  summarize(mean_percent_diff = ____________) %>%
+  arrange(mean_percent_diff)
+```
+
+
+Instead of `Percent_Diff`, I just want to know which job `Family` has the highest mean **State_Salary**. Again, use the `group_by()` and summarize the `mean(State_Salary)`.
+
+```{r}
+# Remove some, Add in fill in the blanks
+________ %>% 
+  ______________ %>% 
+  summarize(mean_salary = ___________)%>%
+  arrange(desc(mean_salary))
+```
+
+
+dang. I should've been a lawyer...
+
+
+
+#### Create a ggplot
+
+Let's recall our ggplot skills. I want to make a simple scatter plot of `Market_65th` on the x-axis and `State_salary` on the y - axis. Fill in the blanks "_____". I have added in a bunch of additional code to specify specific coloring and sizing based on Job family. 
+```{r}
+ggplot(data = ______, mapping = aes(
+  x = ________,
+  y = ________,
+  color = Family == "PH01 - Fish and Wildlife", #Only changing the color and size of F&W job family
+  size = Family == "PH01 - Fish and Wildlife"   #Only changing the color and size of F&W job family
+)) +  
+  geom______() + # Create an xy scatterplot
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") + # Creates a 1-1 line to represent 0% difference
+  scale_color_manual(
+    values = c("gray70", "darkgreen"), # Specifies color change just for F&W
+    labels = c("Other", "PH01 - Fish and Wildlife"), 
+    name = "Job Family"
+  ) + 
+  scale_size_manual(
+    values = c(1.5, 3), # Specifies the size for F&W vs Others
+    guide = "none"      # hide size legend (optional)
+  ) + 
+  labs(                 # Specify your title and axis labels
+    title = "___________", 
+    x = "________________",
+    y = "_________________"
+  ) + 
+  theme_minimal()
+```
+
+
+#### Boxplot example
+
+We can graphically show the same summary statistics we calculated before.
+Let's create a **boxplot** where our x-axis will be determined by job `Group` and the y-axis will be determined by `Percent_Diff`.  
+Because `Group` data is a *character* structure, the default ordering on the x-axis will be alphabetical. I have used the `reorder()` function here to instead order by the median `Percent_Diff`, where the first argument will be the x-variable we are interested in (`Group`). 
+```{r}
+
+ggplot(data = _________, mapping = aes(
+  x = reorder(________, Percent_Diff, FUN = median, na.rm = TRUE),
+  y = _____________))+   # You can also map color = Group if you want
+  geom________() + # Add in the correct geom_ function
+  labs(
+    title = "__________",     # Specify your axis labels
+    x = "___________",
+    y = "___________"
+  ) +
+  theme_minimal() +
+  geom_hline(yintercept =  0,color = "red")+ #Adds red line at 0
+  scale_y_continuous(breaks = seq(-30,20,5))+  #Scale Y-axis for readability
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotates axis labels for readability
+# + coord_flip() #will flip the x & y axis
+
+```
+
+
+
+🧶 Feel free to **knit** the rmd.  
+
+  
+👍 Give a thumbs up once you have reached this point!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

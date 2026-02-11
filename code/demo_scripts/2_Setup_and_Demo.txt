@@ -1,0 +1,38 @@
+SECTION 2 RSTUDIO SETUP & DEMO
+
+* Unzip & save materials
+  - navigate (probably in Downloads)
+  - highlight, Extract all
+  - browse, New folder, name it & Select Folder
+* open Rstudio by itself, create a new project for the class
+  - New Project in upper right, Existing directory
+  - browse, open
+
+-------
+
+* Change the default settings
+  - Tools, Global Options
+
+* Then show:
+  - console: 2+2
+  - script (File, new file, R script): 2+2
+    . enter
+    . ctrl+enter / Run
+  - TheAnswer <- 2+2, demo environment
+  - TheAnswer + 1
+  - show #
+* Files, open the next .R script
+* close RStudio
+* reopen it from the .Rproj file
+  - hey look, scripts are there
+  - hey look, environment is empty
+
+* Tools, Global Options
+  - can change pane layout
+  - even better, can change Appearance
+
+* Help tab!
+
+-------
+
+* Show switching projects

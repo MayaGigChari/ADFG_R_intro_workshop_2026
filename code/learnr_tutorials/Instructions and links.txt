@@ -1,0 +1,22 @@
+These tutorials were created for the 2023 iteration of the Intro to R class, and
+can be run on your computer by navigating to the appropriate folder and opening
+the .Rmd file inside.  Click on a button near the top that says "Run Document".
+If there is a message saying additional packages need to be installed (possibly
+knitr and learnr), go ahead and install them as needed.
+
+There is not a complete correspondence between the 2023 and 2025 versions of the
+course, but hopefully these should provide some additional practice as desired!
+
+If you run into problems running the tutorials on your computer, they are also
+available online at the following links:
+
+https://justinpriest.shinyapps.io/ADFG_IntroR-Tutorial_3_Programming_Basics_I/
+ 
+https://justinpriest.shinyapps.io/ADFG_IntroR-Tutorial_4_Programming_Basics_II/
+ 
+https://justinpriest.shinyapps.io/ADFG_IntroR-Tutorial_5_ReadingRealData/
+ 
+https://justinpriest.shinyapps.io/ADFG_IntroR-Tutorial_6_DataManipulation/
+ 
+https://justinpriest.shinyapps.io/ADFG_IntroR-Tutorial_7_ggplot2/
+ 

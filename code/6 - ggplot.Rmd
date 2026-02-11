@@ -1,0 +1,295 @@
+---
+title: "Data Visualization with GGplot"
+author: "Your Name Here"
+output: html_document
+---
+
+```{r setup,include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,message = FALSE)
+```
+
+Press the green arrow on this code chunk to turn off warning messages.  
+  
+  
+#### 📚 Helpful Resources for ggplot2
+
+- 🎨 [**ggplot2 Reference Website**](https://ggplot2.tidyverse.org/index.html)  
+
+- 📄 [**RStudio Data Visualization Cheatsheet**](https://rstudio.github.io/cheatsheets/html/data-visualization.html)
+
+- 📊 [**ggplot2 Cheatsheet from R-Statistics.co**](https://r-statistics.co/ggplot2-cheatsheet.html)  
+
+- 🖼️ [**R Graphics Cookbook**](https://r-graphics.org/)  
+
+- 📗 [**R for Data Science (ggplot2 Chapter)**](https://r4ds.had.co.nz/data-visualisation.html)  
+
+#### ⚙️ Your Turn (Set Up)
+
+First step is always load the necessary packages. Insert a code chunk below (**Ctrl + Alt + I**), and load the `tidyverse` and `palmerpenguins` packages using `library()`.  
+
+
+------------------------------------------------------------------------  
+  
+Next we can take a look at the data structure. It may help to reference column names that you are interested in visualizing.  
+
+```{r}
+glimpse(penguins)
+```
+  
+------------------------------------------------------------------------
+  
+## 🖼️ Your Turn 1
+  
+Follow the code on the slide to make your first `ggplot`. Remember that R is case sensitive.  
+
+```{r}
+
+```
+
+Each element of the plot is a layer and we can stack many layers together. Lets try adding in another layer to draw in a regression line. Use `+` at the end of your last function to add another layer and type in: `geom_smooth(method = "lm, se = FALSE)`  
+For this layer we will use `method = "lm"` to specify we want a linear model, and `se = FALSE` to turn off the the confidence interval visual. Use `?geom_smooth` to see more options.
+
+```{r}
+#Copy your code to draw the scatter plot, then add a new layer using +
+#geom_smooth(method = "lm, se = FALSE)
+
+
+```
+  
+Wow! it appears that as bill length increases, bill depth decreases... strange  
+  
+------------------------------------------------------------------------  
+  
+There are many other types of `geoms` you can use! Try a few out.  
+  
+```{r}
+p <- ggplot(data = penguins) #creates the base plot 
+
+#barplot
+p + geom_bar(aes(x=flipper_length_mm))
+
+#boxplot
+p + geom_boxplot(aes(x=species,y = body_mass_g))
+
+#density plot
+p + geom_density(aes(x = body_mass_g))
+```
+
+👍 Give a thumbs up once you have reached this point!  
+  
+------------------------------------------------------------------------  
+  
+## 📊 Your turn 2  
+  
+Go ahead and create a `boxplot` of **flipper_length_mm** (y) by **island** (x) and `color` (or `fill =`) by **species**.  
+
+```{r}
+
+```
+  
+Interesting. It appears that Adelie species is present on all three islands whereas Gentoo's are only found on Biscoe, and Chinstrap's are only found on Dream.  
+
+------------------------------------------------------------------------  
+  
+Go ahead and experiment with other *aesthetics* and *geoms\_*. Some options include: `aes(x = ,y = , color = , fill = , size = , shape = , alpha = , linetype = )`  
+
+```{r}
+
+```
+  
+------------------------------------------------------------------------  
+
+When you are satisfied, lets revisit our regression line from earlier. Lets now color our points by `species` and redraw the regression. Fill in the blanks:
+
+```{r}
+ggplot(data = ______, mapping = aes(x = ______,
+                                    y = ______,
+                                    color = ______))+
+  geom_*****()+
+  geom_smooth(method = "__", se = _____)
+```
+  
+Whew. That makes a lot more sense. Now a separate regression line is fit for each `color` (species). We see now that as bill length increases, so does bill depth. Bonus points if you know the name of this paradox -- share it in the chat!  
+
+------------------------------------------------------------------------
+
+Now lets see what happens when we place the mapping of aesthetics directly in the `geom_` function rather than within the `ggplot(`) function. 
+
+```{r}
+ggplot(data = penguins, mapping = aes(x = bill_length_mm,
+                                      y = bill_depth_mm))+ # No color mapped globally in ggplot()
+  geom_point(mapping = aes(color = species))+ #color is mapped within geom_point() instead
+  geom_smooth(method = "lm", se = FALSE) #geom_smooth no longer fits to each species, but rather globally
+
+
+# You can try adding in size = sex, or shape = sex within the geom_point layer too.
+```
+
+🔑 Mappings (and data) that appear **inside** of `ggplot()` will apply globally to every layer. Whereas, mappings (and data) that appear **inside** a `geom_` function will add to or override the global mappings for that layer only.
+
+------------------------------------------------------------------------
+
+👍 Give a thumbs up once you have reached this point!
+
+## #️⃣ Your turn 3
+
+Go ahead and experiment with a few facet options. Try different combinations of `geoms_` and the variables `island`, `sex`, `species`, or `year`.  
+  
+Use `facet_wrap(~Variable1)` to facet by one variable Use `facet_grid(Variable1~Variable2)` to create sub plots for each combination of your two variables.  
+  
+You can also use the `labs()` function to add labels to your plot. For example:  
+`labs(title = "Scatter plot X~Y ", x = "rename X-axis", y = "rename Y-Axis", etc )`  
+
+```{r}
+# To see the help documentation
+# ?facet_grid
+# ?facet_wrap
+# ?labs()
+
+
+
+```
+  
+  
+👍 Give a thumbs up once you have reached this point!  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+👀 No peeking ahead!
+
+
+
+
+  
+
+
+
+
+
+------------------------------------------------------------------------
+  
+## 🎨 Final Challenge: Create and Share Your Own ggplot
+
+Now it’s your turn! Put your `ggplot2` skills into action by creating your **own custom plot**.  
+You’ll design it, save it, and then share it with the class.
+
+------------------------------------------------------------------------
+
+##### 🧠 Helpful Resources
+
+-   📄 [**ggplot2 Cheatsheet (HTML version)**](https://rstudio.github.io/cheatsheets/html/data-visualization.html)
+-   📘 [**ggplot2 Reference Site**](https://ggplot2.tidyverse.org/)
+-   🔎 Use `?geom_point`, `?facet_wrap`, etc. in the Console for quick help.
+
+------------------------------------------------------------------------
+
+### 🪜 Step-by-Step Instructions
+
+#### 1️⃣ Choose a dataset
+
+You can use one of these built-in datasets in R or `ggplot2`:
+
+-   `penguins` – Measurements for 3 penguin species (body size, island, sex, etc.) from Antarctica
+-   `iris` – Classic dataset with petal/sepal measurements for 3 flower species
+-   `diamonds` – Nearly 54,000 diamonds with cut, color, clarity, carat, and price
+-   `mpg` – Fuel economy data for various car models (engine size, class, highway mpg)
+-   `mtcars` – Vintage car specs (e.g., cylinders, horsepower, transmission)
+-   `starwars` – Info on Star Wars characters (height, mass, homeworld, species, etc.)
+
+use `glimpse(dataset)`, `str(data)`, or `head(data)` to get an idea of the data sets structure.  
+  
+Initialize plot: `ggplot(data = )`
+
+#### 2️⃣ Map aesthetics with aes()
+
+Decide what variables you want to visualize.
+
+`mapping = aes(x = ,y = ,color = ,fill = ,size = ,shape = ,alpha = , fill = )`
+
+#### 3️⃣ Choose your geometric objec (geom_*())
+
+Think about how your data should be represented:
+
+-   `geom_point()` # Scatterplot
+-   `geom_bar()` # Bar chart (requires just x)
+-   `geom_boxplot()` # Boxplot
+-   `geom_histogram()` # Histogram (requires just x)
+-   `geom_line()` # Line chart
+-   `geom_xxxx` # Many more to explore
+
+#### 4️⃣ Add custom features (optional but encouraged!)
+
+Make your plot your own by exploring these:
+
+**Faceting:**  
+- `facet_wrap(~ variable)` #1d ribbon  
+  
+- `facet_grid(row ~ col)` #2d grid of rows ~ columns
+
+**Coordinate systems:**  
+
+-`coord_flip()` – flip axes
+
+-`coord_polar()` – radial layout  
+
+**Scaling:**    
+**Try using `scale_color_manual()`, `scale_size_continuous()`, or `scale_x_binned()`, etc
+
+**Themes:**  
+Apply a built-in theme like `theme_minimal()`, `theme_classic()`, or `theme_bw()`
+
+**Position:**  
+`position = "stack"` - default  
+`position = "fill"` - stack overlapping, scaled to 1  
+`position = "dodge"` - place overlapping parts side-by-side  
+`position = "jitter"` - for geom point, adds random noise to each point.  
+`geom_jitter()` does the same thing.
+
+**Labels:**  
+
+`+ labs(...)`  
+`title = "My Plot"`  
+`subtitle = "Subtitle of my plot"`  
+`x = "Rename X-axis"`  
+`y = "Rename Y-axis"`  
+`color = "New legend title for color"`  
+`shape = "New legend title for shape"`  
+`size = "New legend title for size" `  
+
+#### 5️⃣ Save your plot as an object  
+
+Store your plot as an object in your environment so you can view it later:  
+
+`my_plot <- ggplot(...) + ...`  
+
+#### 6️⃣ Export your plot with ggsave()  
+
+`ggsave("my_plot.png", my_plot, width = 6, height = 4, dpi = 300)`  
+
+📌 This saves the plot as an image (.png) in your working directory. Make sure the file name ends in .png, .jpg, or .pdf depending on what format you want.  
+
+#### 7️⃣ Share your plot!  
+
+🎉 Post your saved image (or a screenshot) in the teams chat. (you can also just right-click and copy-paste your plot)  
+
+#### 8️⃣ Knit your project! 
+
+🧶 When you're done with your plot, **click the "Knit"** button at the top of RStudio, or use the keyboard shortcut: *Ctrl + Shift + K*.  
+
+This will render your .Rmd into an HTML report with all your code, text, and your final plot!
+
+
+
+👍 Give a final thumbs up once you have reached this point! 

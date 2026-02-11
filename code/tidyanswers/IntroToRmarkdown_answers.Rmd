@@ -1,0 +1,245 @@
+---
+title: "Intro to R Markdown"
+author: "Logan Wendling"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##### 🧠 Helpful Resources for R Markdown
+
+- 📝 [**R Markdown Cheatsheet (HTML)**](https://rstudio.github.io/cheatsheets/html/rmarkdown.html)  
+
+- 📘 [**R Markdown: The Definitive Guide**](https://bookdown.org/yihui/rmarkdown/)  
+
+- 🍳 [**R Markdown Cookbook**](https://bookdown.org/yihui/rmarkdown-cookbook/)  
+
+- 📗 [**R for Data Science (R Markdown Chapter)**](https://r4ds.had.co.nz/r-markdown.html)  
+
+
+
+## Welcome to R markdown!
+
+This is an R Markdown file (.RMD). It contains plain text interspersed with grey chunks of code. You can use the file to take notes *and* run code. ✅ First step is to enter your name above in the **YAML** header next to author.
+
+------------------------------------------------------------------------
+
+### 📝 What is R Markdown?
+
+R Markdown allows you to create documents that combine **code**, **text**, **plots**, and **output** in one file. You can generate reports in HTML, PDF, or Word.
+
+We can use R Markdown to:  
+- Integrate code, results, and commentary into one coherent document  
+- Create and share reproducible results  
+- Track workflows
+
+------------------------------------------------------------------------
+
+### ⌨️ Code Chunks
+
+```{r}
+# This is a code chunk.
+# Code chunks work similarly to Rscripts
+# You can comment out sections to not run using the " # " symbol
+# To run the code, click the Green play button at the
+# top right of this chunk. Try it!
+str(pressure)
+```
+
+You can insert a new code chunk by clicking the green **+ C** button in the editor toolbar or by using the shortcut **Ctrl + Alt + I**, or by manually typing the backticks " ``` " and {r} and then closing the code chunk with three more backticks "```" 
+
+*Try it now:* Insert a new chunk below and run this line of code: mean(c(100,15,62,75,81,23,7))  
+___
+```{r}
+mean(c(100,15,62,75,81,23,7))
+```
+
+___  
+
+```{r}
+# Sometimes you might want to run only some of the code 
+# in a code chunk. To do that, highlight the code to 
+# run and then press Ctrl + Enter 
+# If you do not highlight any code, R will 
+# run the line of code that your cursor is on.
+# Try it now. Run sum(c(0,1,1,2,3,5,8,13)) but not the line below.
+
+sum(c(0,1,1,2,3,5,8,13))
+warning("You shouldn't run this!")
+
+```
+___
+
+Press play to create an object of the first 7 numbers in a Fibonnaci sequence, where each number is the sum of the two preceding ones.
+```{r}
+fibonacci <- c(1,1,2,3,5,8,13)
+```
+
+Notice that you when you run that code it created an object in your global environment!  
+
+⚠️ Important: When you're working in RMarkdown interactively, code chunks can access objects from your current R environment, like data frames or plots you've created in the **console**.  
+
+However, when you **knit** the document, it starts a completely fresh R session, so only objects created **within** the RMarkdown file itself will be recognized.  
+
+✅ If you want something to show up when you knit, make sure the code to create it is included in a chunk!
+
+
+```{r}
+# You can click the downward facing arrow to the left of the play button to run
+# every chunk above the current code chunk. This is useful if the code in your
+# chunk uses object that you made in previous chunks.
+
+tail(fibonacci, n=2)  # Show the last two values on the vector 
+
+fibonacci <- c(fibonacci,sum(tail(fibonacci,n=2))) #combines the original vector, with the sum of the last two values,
+                                                   #Then saves it as a new vector with the same name
+
+fibonacci                       
+```
+
+If you click the green arrow over and over it will run this code chunk and continue to calculate the next value in the Fibonacci sequence. When you click the downward facing arrow it runs every code chunk above and will rewrite the `fibonacci` object with the code from the previous chunk.
+
+------------------------------------------------------------------------
+
+### 📊 Creating a Plot
+
+You can also create plots in Rmarkdown. Press the green arrow to show a basic plot using the built-in `pressure` data set.
+
+```{r pressure-plot}
+
+plot(pressure, col = "blue", pch = 2)
+
+# "col" is changing the color
+# "pch" is changing the point shape
+```
+
+------------------------------------------------------------------------
+
+### ✍️ Adding Markdown Text
+
+Have you noticed how some of the text in this document looks a little different? That's because R Markdown uses special characters to help format your writing. For example:
+
+-   `*italic*` → *italic*  
+-   `**bold**` → **bold**  
+-   `~~strikethrough~~` → ~~strikethrough~~  
+-   `x^2^` → x^2^  
+-   `` `code` `` → `code`
+
+R Markdown uses these little symbols to tell your computer how to style the text when it's rendered. It might look plain in the editor, but once you knit the document — magic happens ✨
+
+------------------------------------------------------------------------
+
+### 📦 Loading Packages
+
+Use the `library()` function to load packages. Remember the tidyverse is a collection of packages. We can load each package individually or we can call just the `tidyverse` package which will load all the core packages. Load the`tidyverse` package (after **installing** it in the Console, **not** in this document).
+
+```{r}
+library(tidyverse)
+```
+
+------------------------------------------------------------------------
+
+### 👀 Sneak Peek
+
+In the next section we will be working with `ggplot` to create data visualizations.`mpg` and `starwars` are two data sets that come pre-loaded in `ggplot` that are handy to work with. Press the green button to see two example plots created using ggplot.
+
+```{r, message=FALSE,warning = FALSE}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point(size = 1, alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 1) +
+  facet_wrap(~ class, scales = "free_y") +
+  labs(
+    title = "Engine Displacement vs Highway MPG",
+    subtitle = "Faceted by Vehicle Class",
+    x = "Engine Displacement (liters)",
+    y = "Highway MPG",
+    color = "Vehicle Class"
+  ) +
+  theme(
+    plot.title = element_text(size = 18),
+    plot.subtitle = element_text(size = 12),
+    legend.position = "none"
+  )
+
+
+ggplot(starwars, aes(x = height, y = mass, color = mass)) +
+  geom_point(size = 2, alpha = 0.9) +
+  geom_text(
+    data = starwars %>% 
+      filter(mass == max(mass, na.rm = TRUE)) %>% 
+      mutate(name = "Jabba the Hutt"),
+    aes(label = name),
+    vjust = 2,
+    color = "black"
+  ) +
+  scale_color_viridis_c(option = "H")+
+  labs(
+    title = "Star Wars Characters: Height vs Mass",
+    x = "Height (cm)",
+    y = "Mass (kg)",
+    color = "Mass"
+  ) +
+  theme(
+    plot.title = element_text(size = 18),
+    legend.position = "right"
+  )
+
+
+```
+
+------------------------------------------------------------------------
+
+### ✅ Your Turn
+
+🧪 Feel free to explore Rmarkdown. Insert code chunks, write a book, analyze data, etc.
+
+##### 🧠 If you're up for a challenge!
+
+Earlier we gave code that calculates the next value in the Fibonacci sequence. The golden ratio, or better known as the divine proportion, is a mathematical ratio of roughly ~ 1:1.618... or $\Phi$. There is a special relationship between the Golden Ratio and Fibonnaci numbers where we can take the ratio of two successive numbers to approximate the golden ratio. When you divide the larger one by the smaller one, the answer is something close to Phi ($\Phi$). The further you go along the Fibonacci Sequence, the closer the ratio gets to Phi.
+
+Can you write a code chunk that can be used to approximate the golden ratio?
+
+Hints:  
+💡 Start with creating a vector for the Fibonnaci sequence.  
+Next create the function to calculate the next value of the sequence.  
+Finally, extract the Last number and divide by the second to last number.  
+Remember that if you have a vector `X,` then `X[1]`would extract the first number...  
+`length(X)` would give you the number of elements in vector `X`
+
+```{r}
+fibonacci <- c(1,1) # first two values of the Fibonacci sequence
+```
+
+```{r}
+
+# Add the next value
+fibonacci <- c(fibonacci, sum(tail(fibonacci, n = 2)))
+
+# Approximate the golden ratio using the last two numbers
+phi_approx <- tail(fibonacci, n = 1) / tail(fibonacci, n = 2)[1]
+# phi_approx <- fibonacci[length(fibonacci)] / fibonacci[length(fibonacci) - 1]
+
+# Print the result
+phi_approx
+
+
+```
+
+------------------------------------------------------------------------
+
+## 🧶 Knit
+
+When you are ready, click the **knit** button at the top of this document or press *Ctrl+Shift+K* to render the finished report. This should create an HTML file that combines all the code, text, and plots into one document and saves the finished report alongside your .Rmd file.
+
+------------------------------------------------------------------------
+
+### 🏆 Bonus Points!
+
+In the next section we will be using the data set `penguins` from the `palmerpenguins` **package**. If you have not already, go ahead and install that package in your **console**. Remember that packages only need to be installed once per computer, but will need to be loaded with `library()` in each R session.
+
+[Palmer Penguins](https://allisonhorst.github.io/palmerpenguins/articles/intro.html)
+
+### Happy coding 🐧
